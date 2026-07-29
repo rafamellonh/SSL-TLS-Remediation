@@ -11,10 +11,11 @@ identified in the penetration test and tracked in the
 Each endpoint has a **baseline (before)** report and an **`-after`** report,
 providing evidence that the protocol/cipher configuration was fixed.
 
-> ⚠️ **Security notice:** All hostnames, FQDNs, IP addresses, rDNS entries, and
-> the scanning host's name have been redacted or replaced with generic
-> placeholders (e.g. `<FQDN_OR_IP>`, `<TARGET>`) for security reasons. This does
-> not affect the methodology or the validity of the before/after comparison.
+> ⚠️ **Security notice:** All hostnames, FQDNs, IP addresses, and rDNS entries in
+> these reports have been replaced with reserved documentation placeholders
+> (`192.0.2.0/24` – RFC 5737 TEST-NET-1, and `.invalid` – RFC 2606). No real
+> address is exposed. This does not affect the methodology or the validity of
+> the before/after comparison.
 
 ---
 
@@ -85,9 +86,6 @@ Same command, pointing to the same endpoint, with an `-after` suffix on the file
 ./testssl.sh --html --logfile ./report-before/<TARGET>-after.html <FQDN_OR_IP>
 ```
 
-> Each `<TARGET>` maps to a role in the environment (e.g. application node,
-> SSRS PRD, SSRS QA, public site), as shown in the table below.
-
 ### Useful flags (reference)
 
 ```bash
@@ -103,15 +101,16 @@ Same command, pointing to the same endpoint, with an `-after` suffix on the file
 
 ## 5. Generated files
 
-Structure under `report-before/`:
+Structure under `report-before/`. Site names, IPs, and reverse DNS shown below
+are **fictional placeholders** (see security notice above).
 
-| Target (role)        | Before           | After                  |
-|----------------------|------------------|------------------------|
-| Application node #1  | `acc1.html`      | `acc1-after.html`      |
-| Application node #2  | `acc2.html`      | `acc2-after.html`      |
-| SSRS (PRD)           | `ssrs.html`      | `ssrs-after.html`      |
-| SSRS (QA)            | `ssrsqa.html`    | `ssrsqa-after.html`    |
-| Public site (www)    | `www.html`       | `www-after.html`       |
+| Target (role)       | Before / After                     | Site (placeholder)  | IP (placeholder) | rDNS (placeholder)     |
+|---------------------|------------------------------------|---------------------|------------------|------------------------|
+| Application node #1 | `acc1.html` / `acc1-after.html`     | `acc1.example`      | `192.0.2.101`    | `acc1.example.invalid.`   |
+| Application node #2 | `acc2.html` / `acc2-after.html`     | `acc2.example`      | `192.0.2.102`    | `acc2.example.invalid.`   |
+| SSRS (PRD)          | `ssrs.html` / `ssrs-after.html`     | `ssrs.example`      | `192.0.2.103`    | `ssrs.example.invalid.`   |
+| SSRS (QA)           | `ssrsqa.html` / `ssrsqa-after.html` | `ssrsqa.example`    | `192.0.2.104`    | `ssrsqa.example.invalid.` |
+| Public site (www)   | `www.html` / `www-after.html`       | `www.example`       | `192.0.2.105`    | `www.example.invalid.`    |
 
 Each `.html` is the full colorized dump of the test: protocols, cipher
 categories, server preferences, certificate, HSTS/headers, and vulnerability
@@ -152,8 +151,9 @@ After applying the TLS hardening, repeat, changing the filename to
 
 ## 8. Notes
 
-- For security reasons, all real IP addresses, FQDNs, rDNS records, and the
-  scanning host's hostname have been redacted or replaced with placeholders.
+- All IP addresses, FQDNs, and rDNS records in the reports were replaced with
+  reserved documentation ranges (RFC 5737 `192.0.2.0/24` and RFC 2606
+  `.invalid`), so no real infrastructure detail is disclosed.
 - A full scan performs **many handshakes** per target — avoid running it against
   production during peak hours, and only run it against authorized hosts.
 - The tool is distributed under **GPLv2**, with no warranty ("use at your own
